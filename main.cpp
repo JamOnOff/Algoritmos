@@ -38,6 +38,7 @@ int main(int argc, char** argv) {
     cout << endl << cipherOpt(2, "1110001") << endl;
     cout << cipherOpt(3, "1110011011") << "\n\n";
      */
+     
     
     vector<Noticia*> noticias;
     
