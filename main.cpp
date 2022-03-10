@@ -9,11 +9,45 @@
 #include <iostream>
 #include <vector>
 #include <string.h>
+#include <array>
 
 //#include "HackerRank.h"
-#include "Noticia.h"
+//#include "Noticia.h"
 
 using namespace std;
+
+/*
+void generarArreglo(int* arr, int tam, int rango){
+    random_device rd;
+    mt19937 gen(rd());
+    std::uniform_int_distribution<> distrib(0, rango);
+    
+    for (int i = 0; i < tam; i++) 
+        arr[i] = distrib(gen);
+}
+
+void imprimirArreglo(int* arr, int tam){
+    for (int i = 0; i < tam; i++)
+        cout << arr[i] << " ";
+    cout << endl;
+}
+*/
+
+int buscarInt(int* arr, int tam, int num){
+   while(tam >= 0){//n+1
+       if(arr[tam] == num)//2(n+1)
+           return tam + 1; // 1
+       tam--; // 2(n+1)
+   }
+   
+   return 0;
+}
+//f(1) = 5(n + 1) + 1 = 11
+//O(c) = constante
+
+//f(n) = 5(n + 1) + 1
+//O(n) = lineal
+
 
 /*
  * 
@@ -39,7 +73,7 @@ int main(int argc, char** argv) {
     cout << cipherOpt(3, "1110011011") << "\n\n";
      */
      
-    
+    /*
     vector<Noticia*> noticias;
     
     string fecha = "2/3/2022";
@@ -50,7 +84,12 @@ int main(int argc, char** argv) {
     for (Noticia* n : noticias) {
         cout << n -> getInfo() << "\n\n";
     }
-
+    */
+    
+    int arr[] = {10, 24, 31, 8, 15, 11, 27, 9};
+    int tam = sizeof(arr) / sizeof(arr[0]);
+    
+    cout << buscarInt(arr, tam, 27) << "\n\n";
     
     return 0;
 }
