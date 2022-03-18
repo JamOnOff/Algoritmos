@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>Arbol.h</itemPath>
       <itemPath>HackerRank.h</itemPath>
       <itemPath>Noticia.h</itemPath>
     </logicalFolder>
@@ -43,6 +44,8 @@
           <warningLevel>0</warningLevel>
         </ccTool>
       </compileType>
+      <item path="Arbol.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="HackerRank.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Noticia.h" ex="false" tool="3" flavor2="0">
@@ -70,6 +73,8 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Arbol.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="HackerRank.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Noticia.h" ex="false" tool="3" flavor2="0">
