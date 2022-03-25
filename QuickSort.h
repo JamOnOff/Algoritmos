@@ -4,59 +4,16 @@
  */
 
 /* 
- * File:   Ordenamientos.h
+ * File:   QuickSort.h
  * Author: Josue Alvarez M
  *
- * Created on 20 de marzo de 2022, 19:40
+ * Created on 24 de marzo de 2022, 20:18
  */
 
-#ifndef ORDENAMIENTOS_H
-#define ORDENAMIENTOS_H
+#ifndef QUICKSORT_H
+#define QUICKSORT_H
 
-void generarArreglo(int* arr, int tam, int rango){
-    random_device rd;
-    mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(0, rango);
-    
-    for (int i = 0; i < tam; i++) 
-        arr[i] = distrib(gen);
-}
-
-void imprimirArreglo(int* arr, int tam){
-    for (int i = 0; i < tam; i++)
-        cout << arr[i] << " ";
-    cout << endl;
-}
-
-void burbuja(int *arr, int tam){
-    for (int i = tam; i > 0; i--) {
-        for (int j = 0; j < tam-1; j++) {
-            if(arr[j] > arr[j + 1]){
-                // intercambia el j con el j+1
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
-}
-
-void insertionSort(int *arr, int tam){
-    for (int i = 0; i < tam; i++) {
-        int num = arr[i];
-        
-        int j = i-1;
-        while(j >= 0 && arr[j] > num){
-            arr[j+1] = arr[j];
-            j--;
-        }
-        
-        arr[j+1] = num;
-    }
-}
-
-void cambiar(int* a, int* b)
-{
+void cambiar(int* a, int* b){
     int t = *a;
     *a = *b;
     *b = t;
@@ -153,5 +110,6 @@ void quickSort1_log(int *arr, int tam, int tipo){
     if(tipo == 0) // pivote fijo (en el medio)
         quickSort1_logProc(arr, tam, (tam - 1)/2, 0, tipo);
 }
-#endif /* ORDENAMIENTOS_H */
+
+#endif /* QUICKSORT_H */
 

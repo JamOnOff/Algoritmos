@@ -6,8 +6,9 @@
                    projectFiles="true">
       <itemPath>Arbol.h</itemPath>
       <itemPath>HackerRank.h</itemPath>
+      <itemPath>InsertionSort.h</itemPath>
       <itemPath>Noticia.h</itemPath>
-      <itemPath>Ordenamientos.h</itemPath>
+      <itemPath>QuickSort.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -49,9 +50,11 @@
       </item>
       <item path="HackerRank.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="InsertionSort.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Noticia.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Ordenamientos.h" ex="false" tool="3" flavor2="0">
+      <item path="QuickSort.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -80,9 +83,11 @@
       </item>
       <item path="HackerRank.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="InsertionSort.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Noticia.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Ordenamientos.h" ex="false" tool="3" flavor2="0">
+      <item path="QuickSort.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>

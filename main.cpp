@@ -21,8 +21,9 @@
 
 //#include "HackerRank.h"
 //#include "Noticia.h"
+#include "QuickSort.h"
+#include "InsertionSort.h"
 #include "Arbol.h"
-#include "Ordenamientos.h"
 
 using namespace std;
 
@@ -48,6 +49,34 @@ public:
     }
 
 };
+
+void generarArreglo(int* arr, int tam, int rango){
+    random_device rd;
+    mt19937 gen(rd());
+    std::uniform_int_distribution<> distrib(0, rango);
+    
+    for (int i = 0; i < tam; i++) 
+        arr[i] = distrib(gen);
+}
+
+void imprimirArreglo(int* arr, int tam){
+    for (int i = 0; i < tam; i++)
+        cout << arr[i] << " ";
+    cout << endl;
+}
+
+void burbuja(int *arr, int tam){
+    for (int i = tam; i > 0; i--) {
+        for (int j = 0; j < tam-1; j++) {
+            if(arr[j] > arr[j + 1]){
+                // intercambia el j con el j+1
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
 
 /**************************************
         Función agregarSubStr
