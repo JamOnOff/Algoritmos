@@ -13,91 +13,41 @@
 #include <list>
 #include <random>
 #include <math.h>
-
+#include <unordered_map>
 #include <ctime>
 #include <chrono>
 #include <bits/stdc++.h> 
+#include <math.h> 
 
 //#include "HackerRank.h"
 //#include "Noticia.h"
 #include "Arbol.h"
+#include "Ordenamientos.h"
 
 using namespace std;
 
-/*
-void generarArreglo(int* arr, int tam, int rango){
-    random_device rd;
-    mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(0, rango);
-    
-    for (int i = 0; i < tam; i++) 
-        arr[i] = distrib(gen);
-}
+class Archivo{
+private:
+    string dir;
+    string texto;
+public:
+    Archivo(string dir){
+        this->dir = dir;
+        this->texto = "";
+        
+        ifstream archivo(dir);
 
-void imprimirArreglo(int* arr, int tam){
-    for (int i = 0; i < tam; i++)
-        cout << arr[i] << " ";
-    cout << endl;
-}
-
-
-int buscarInt(int* arr, int tam, int num){
-   while(tam >= 0){//n+1
-       if(arr[tam] == num)//2(n+1)
-           return tam + 1; // 1
-       tam--; // 2(n+1)
-   }
-   
-   return 0;
-}
-//f(1) = 5(n + 1) + 1 = 11
-//O(c) = constante
-
-//f(n) = 5(n + 1) + 1
-//O(n) = lineal
-
-
-
-void radixSort(int *arr, int n, int max) {
-   int i, j, m, p = 1, index, temp, count = 0;
-   list<int> pocket[10];      //radix of decimal number is 10
-   for(i = 0; i< max; i++) {
-      m = pow(10, i+1);
-      p = pow(10, i);
-      for(j = 0; j<n; j++) {
-         temp = arr[j]%m;
-         index = temp/p;      //find index for pocket array
-         pocket[index].push_back(arr[j]);
-      }
-      count = 0;
-      for(j = 0; j<10; j++) {
-         //delete from linked lists and store to array
-         while(!pocket[j].empty()) {
-            arr[count] = *(pocket[j].begin());
-            pocket[j].erase(pocket[j].begin());
-            count++;
-         }
-      }
-   }
-}
-
-void burbuja(int *arr, int tam){
-    for (int i = tam; i > 0; i--) {
-        for (int j = 0; j < tam-1; j++) {
-            if(arr[j] > arr[j + 1]){
-                // intercambia el j con el j+1
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
+        string linea;
+        while(getline(archivo, linea)){
+            this->texto += linea;
         }
     }
-}
+    
+    string getTexto() const {
+        return texto;
+    }
 
-*/
-
-
-
+};
 
 /**************************************
         Función agregarSubStr
@@ -109,159 +59,251 @@ void burbuja(int *arr, int tam){
  * 
  *  O(n^2)
  * 
- *  t = "abc"   tamaño 3
+ *  t = "abcd"   tamaño 4
  *  "a"         1
  *  "b"         
- *  "c"         
+ *  "c"
+ *  "d"         
  *  "ab"        2
  *  "bc"        
+ *  "cd"        
  *  "abc"       3
- * 
+ *  "bcd"
+ *  "abcd"      4
 ***************************************/     
 void agregarSubStr(Arbol* a, string t){
     int tam = t.size();
-    
     for (int i = 1; i <= tam; i++) { // i: tamaño del sub string a generar
-        string str = "";
-        for (int j = 0; j < tam; j++) {
-            str += t[j]; // Agrega el char al substring 
-            
-            if(str.size() == i){ // Si el sub string ya tiene el tamaño i este se inserta en el albol
-                a->insertarHijo(str); // inserta en el arbol
-                str = str.substr(1, i); // quita el primer char del string
-            }
-        }
+        for (int j = 0; i+j-1 < tam; j++)
+            a->insertarHijo(t.substr(j, i));
     }
 }
 
-/**************************************
-              función LPS  O(n)
-***************************************/          
-void lps_func(string txt, vector<int>&Lps){
-    Lps[0] = 0;                   
-    int len = 0;
-    int i = 1;
-    while (i < txt.length()){
-        if(txt[i] == txt[len]){   
-            len++;
-            Lps[i] = len;
-            i++;
-            continue;
+void pruebaQuickSort_log(int inc, int cant){
+    double_t tiempoAnt = -1;
+    double_t tiempoAct;
+    
+    double_t logAnt = -1;
+    double_t logAct;
+    
+    int tam = inc;
+    
+    cout << "QuickSort O(log(n))\nElementos   -   Tiempo   -   Log   -   Diferencia\n";
+    for (int i = 0; i < cant; i++) {
+        int *arr = new int[tam];
+        generarArreglo(arr, tam, tam);
+        
+        auto inicio = chrono::steady_clock::now();
+        //quickSort1_log(arr, tam, 0);
+        quickSort2_log(arr, 0, tam-1);
+        
+        auto fin = chrono::steady_clock::now();
+        auto tiempo = std::chrono::duration_cast<std::chrono::nanoseconds>(fin - inicio);
+        
+        tiempoAct = ((double_t)tiempo.count()/(double_t)1000000000);
+        logAct = log(tam);
+        if(tiempoAnt >= 0){
+            double_t tiempoDif = abs((tiempoAct - tiempoAnt));
+            double_t logDif = abs((logAct - logAnt));
+            double_t dif = abs(logDif - tiempoDif);
+            cout << tam-inc << " " << tam << ": " << to_string(tiempoDif);
+            cout << " : " << to_string(logDif) << " : " << to_string(dif) << endl;
         }
-        else{                   
-            if(len == 0){         
-                Lps[i] = 0;
-                i++;
-                continue;
-            }
-            else{              
-                len = Lps[len - 1];
-                continue;
-            }
-        }
+        
+        tiempoAnt = tiempoAct;
+        logAnt = logAct;
+        tam += inc;
     }
+    cout << endl;
 }
 
-/**************************************
-              función KMP(Knuth Morris Pratt)  O(n)
-***************************************/  
-int KMP(string pattern,string text){
-    int cant = 0;
+void pruebaQuickSort_NN(int inc, int cant){
+    double_t tiempoAnt = -1;
+    double_t tiempoAct;
     
-    int n = text.length();
-    int m = pattern.length();
-    vector<int>Lps(m);
+    double_t nnAnt = -1;
+    double_t nnAct;
     
-    //O(n)
-    lps_func(pattern,Lps); // This function constructs the Lps array.
+    int tam = inc;
+    double_t tamComp;  // tamaño para comparar el n^2
     
-    int i=0,j=0;
-    while(i<n){
-        if(pattern[j]==text[i]){i++;j++;} // If there is a match continue.
-        if (j == m) { 
-            cant++;
-                                  // and update j as Lps of last matched character.
-            j = Lps[j - 1]; 
-        } 
-        else if (i < n && pattern[j] != text[i]) {  // If there is a mismatch
-            if (j == 0)          // if j becomes 0 then simply increment the index i
-                i++;
-            else
-                j = Lps[j - 1];  //Update j as Lps of last matched character
+    cout << "QuickSort O(n^2)\nElementos   -   Tiempo   -   n^2   -   Diferencia\n";
+    for (int i = 0; i < cant; i++) {
+        int *arr = new int[tam];
+        generarArreglo(arr, tam, tam);
+        
+        quickSort1_log(arr, tam, 0);
+        
+        auto inicio = chrono::steady_clock::now();
+        quickSort2_log(arr, 0, tam-1);
+        
+        auto fin = chrono::steady_clock::now();
+        auto tiempo = std::chrono::duration_cast<std::chrono::nanoseconds>(fin - inicio);
+        
+        tiempoAct = ((double_t)tiempo.count()/(double_t)1000000000);
+        tamComp = (double_t)tam/inc;
+        nnAct = tamComp*tamComp;
+        if(tiempoAnt >= 0){
+            double_t tiempoDif = abs((tiempoAct - tiempoAnt));
+            double_t logDif = abs((nnAct - nnAnt));
+            double_t dif = abs(logDif - tiempoDif);
+            cout << tam-inc << " " << tam << ": " << to_string(tiempoDif);
+            cout << " : " << to_string(logDif) << " : " << to_string(dif) << endl;
         }
+        
+        tiempoAnt = tiempoAct;
+        nnAnt = nnAct;
+        tam += inc;
     }
-    
-    return cant;
+    cout << endl;
 }
 
+void pruebaInsertionSort_NN(int inc, int cant){
+    double_t tiempoAnt = -1;
+    double_t tiempoAct;
+    
+    double_t nnAnt = -1;
+    double_t nnAct;
+    
+    int tam = inc;
+    double_t tamComp;  // tamaño para comparar el n^2
+    
+    cout << "InsertionSort O(n^2)\nElementos   -   Tiempo   -   n^2   -   Diferencia\n";
+    for (int i = 0; i < cant; i++) {
+        int *arr = new int[tam];
+        generarArreglo(arr, tam, tam);
+        
+        auto inicio = chrono::steady_clock::now();
+        insertionSort(arr, tam);
+        
+        auto fin = chrono::steady_clock::now();
+        auto tiempo = std::chrono::duration_cast<std::chrono::nanoseconds>(fin - inicio);
+        
+        tiempoAct = ((double_t)tiempo.count()/(double_t)1000000000);
+        tamComp = (double_t)tam/inc;
+        nnAct = tamComp*tamComp;
+        
+        if(tiempoAnt >= 0){
+            double_t tiempoDif = abs((tiempoAct - tiempoAnt));
+            double_t nnDif = abs((nnAct - nnAnt));
+            double_t dif = abs(nnDif - tiempoDif);
+            cout << tam-inc << " " << tam << ": " << to_string(tiempoDif);
+            cout << " : " << to_string(nnDif) << " : " << to_string(dif) << endl;
+        }
+        
+        tiempoAnt = tiempoAct;
+        nnAnt = nnAct;
+        tam += inc;
+    }
+    cout << endl;
+}
+
+void pruebaInsertionSort_N(int inc, int cant){
+    double_t tiempoAnt = -1;
+    double_t tiempoAct;
+    
+    double_t nAnt = -1;
+    double_t nAct;
+    
+    int tam = inc;
+    
+    cout << "InsertionSort O(n)\nElementos   -   Tiempo   -   n   -   Diferencia\n";
+    for (int i = 0; i < cant; i++) {
+        int *arr = new int[tam];
+        generarArreglo(arr, tam, tam);
+        
+        quickSort1_log(arr, tam, 0);
+        
+        auto inicio = chrono::steady_clock::now();
+        insertionSort(arr, tam);
+        
+        auto fin = chrono::steady_clock::now();
+        auto tiempo = std::chrono::duration_cast<std::chrono::nanoseconds>(fin - inicio);
+        
+        tiempoAct = ((double_t)tiempo.count()/(double_t)1000000000);
+        nAct = (double_t)tam;
+        if(tiempoAnt >= 0){
+            double_t tiempoDif = abs((tiempoAct - tiempoAnt));
+            double_t logDif = abs((nAct - nAnt));
+            double_t dif = abs(logDif - tiempoDif);
+            cout << tam-inc << " " << tam << ": " << to_string(tiempoDif);
+            cout << " : " << to_string(logDif) << " : " << to_string(dif) << endl;
+        }
+        
+        tiempoAnt = tiempoAct;
+        nAnt = nAct;
+        tam += inc;
+    }
+    cout << endl;
+}
 
 /*
  * 
  */
 int main(int argc, char** argv) {
-    string t = "En ciencias de la computación, un árbol binario es una estructura de datos en la cual cada nodo puede tener un hijo izquierdo y un hijo derecho. "
-            "No pueden tener más de dos hijos (de ahí el nombre 'binario'). Si algún hijo tiene como referencia a null, es decir que no almacena ningún dato, "
-            "entonces este es llamado un nodo externo. En el caso contrario el hijo es llamado un nodo interno. "
-            "Usos comunes de los árboles binarios son los árboles binarios de búsqueda, los montículos binarios y Codificación de Huffman."
-            ""
-            "En ciencias de la computación, un árbol binario es una estructura de datos en la cual cada nodo puede tener un hijo izquierdo y un hijo derecho. "
-            "No pueden tener más de dos hijos (de ahí el nombre 'binario'). Si algún hijo tiene como referencia a null, es decir que no almacena ningún dato, "
-            "entonces este es llamado un nodo externo. En el caso contrario el hijo es llamado un nodo interno. "
-            "Usos comunes de los árboles binarios son los árboles binarios de búsqueda, los montículos binarios y Codificación de Huffman."
-            ""
-            "En ciencias de la computación, un árbol binario es una estructura de datos en la cual cada nodo puede tener un hijo izquierdo y un hijo derecho. "
-            "No pueden tener más de dos hijos (de ahí el nombre 'binario'). Si algún hijo tiene como referencia a null, es decir que no almacena ningún dato, "
-            "entonces este es llamado un nodo externo. En el caso contrario el hijo es llamado un nodo interno. "
-            "Usos comunes de los árboles binarios son los árboles binarios de búsqueda, los montículos binarios y Codificación de Huffman."
-            ""
-            "En ciencias de la computación, un árbol binario es una estructura de datos en la cual cada nodo puede tener un hijo izquierdo y un hijo derecho. "
-            "No pueden tener más de dos hijos (de ahí el nombre 'binario'). Si algún hijo tiene como referencia a null, es decir que no almacena ningún dato, "
-            "entonces este es llamado un nodo externo. En el caso contrario el hijo es llamado un nodo interno. "
-            "Usos comunes de los árboles binarios son los árboles binarios de búsqueda, los montículos binarios y Codificación de Huffman.";
-    string p = "e";
-    
-    Arbol* a = new Arbol();
-    
-    //Generar substrings e insertarlos al Arbol
-    cout << "Generar substrings e insertarlas al Arbol  O(n^2 + n*log(n))\n";
-    auto inicio = chrono::steady_clock::now();
-    agregarSubStr(a, t);
-    auto fin = chrono::steady_clock::now();
-    auto tiempo = std::chrono::duration_cast<std::chrono::nanoseconds>(fin - inicio);
-    cout << "Tiempo: " + to_string((double_t)tiempo.count()/1000000000) + "s\n\n\n";
+    Archivo *archivo = new Archivo("archivo.txt");
+    string t = archivo->getTexto();
+    string p = ".";
     
     
-    //Arbol Binario
-    int busquedas = 100;
+    Arbol* a = new Arbol(t);
+    
+    //agregarSubStr(a, t);
+    
+    char entrada;
     Nodo *nodoB;
-    cout << "Arbol Binario O(Log(n))\nBusquedas: " << busquedas << endl;
-    inicio = chrono::steady_clock::now();
-    for (int i = 0; i < busquedas; i++) {
-        nodoB = a->buscar(p);
+    
+    pruebaQuickSort_log(500000, 10);
+    pruebaQuickSort_NN(5000, 10);
+    
+    pruebaInsertionSort_NN(10000, 10);
+    pruebaInsertionSort_N(500000, 10);
+    
+    double_t tiempoAnt = 0;
+    while(true){
+        cout << "Arbol Binario  \nPrimera busqueda O(n) Segunda Busqueda O(Log(n))\n\n";
+        cout << "1. Buscar \n";
+        cout << "2. Balanceo \n";
+        cout << "L. Limpiar Consola \n";
+        cout << "S. Salir \n\n";
+
+        cout << ">>> ";
+        cin >> entrada;
+        entrada = toupper(entrada);
+        if(entrada == 'L')
+            system("clear");
+        else if(entrada == 'S')
+            break;
+        
+        else if(entrada == '1'){
+            cout << ">>> ";
+            cin >> p;
+            
+            auto inicio = chrono::steady_clock::now();
+            nodoB = a->buscar(p);
+            auto fin = chrono::steady_clock::now();
+
+            auto tiempo = std::chrono::duration_cast<std::chrono::nanoseconds>(fin - inicio);
+            if(nodoB != NULL)
+                cout << "Aparece: " << nodoB->cant << endl;
+            else
+                cout << "Aparece: " << 0 << endl;
+            if(tiempoAnt == 0)
+                cout << "Tiempo: " + to_string((double_t)tiempo.count()/1000000000) + "s";
+            else{
+                cout << "Tiempo: " + to_string((double_t)tiempo.count()/1000000000) + "s\n";
+                cout << "Tiempo de la Busqueda Anterior: " + to_string(tiempoAnt) + "s\n";
+                cout << "Diferencia: " + to_string(abs(((double_t)tiempo.count()/1000000000) - tiempoAnt));
+            }
+            tiempoAnt = (double_t)tiempo.count()/1000000000;
+            
+            cout << "\n\n\n";
+        }
+        else if(entrada == '2'){
+            cout << "El balanceo del arbol es de: " << a->comprobarBalanceo() << "\n\n";
+        }
+                
     }
-    fin = chrono::steady_clock::now();
-    
-    tiempo = std::chrono::duration_cast<std::chrono::nanoseconds>(fin - inicio);
-    if(nodoB != 0)
-        cout << "Aparece: " << nodoB->cant << endl;
-    else
-        cout << "Aparece: " << 0 << endl;
-    cout << "Tiempo: " + to_string((double_t)tiempo.count()/1000000000) + "s\n\n\n";
-    
-    
-    //Algoritmo KMP(Knuth Morris Pratt)
-    busquedas = 1;
-    int cant;
-    cout << "Algoritmo KMP(Knuth Morris Pratt) O(2n)\nBusquedas: " << busquedas << "\n";
-    inicio = chrono::steady_clock::now();
-    for (int i = 0; i < busquedas; i++) {
-        cant = KMP(p, t);
-    }
-    fin = chrono::steady_clock::now();
-    
-    cout << "Aparece: " << cant << "\n";
-    tiempo = std::chrono::duration_cast<std::chrono::nanoseconds>(fin - inicio);
-    cout << "Tiempo: " + to_string((double_t)tiempo.count()/1000000000) + "s\n\n\n";
     
     return 0;
 }

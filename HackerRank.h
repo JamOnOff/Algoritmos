@@ -148,7 +148,6 @@ void minion_game(string s){
     for (int i = 0; i < s.size(); i++) {
         c = s[i];
         pos = 1;
-        
         if(c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U') // es una vocal
             pos = 0;
         
